@@ -359,38 +359,48 @@ public class MyLinkedList<T> implements List<T> {
 	 * @param expected The expected value
 	 * @param actual The actual value
 	 */
-	private static void testReturn(String message, Object expected, Object actual) {
+	private static int testReturn(String message, Object expected, Object actual) {
 		StringBuilder b = new StringBuilder();
 		
 		b.append(message).append('\n');
 		b.append(" Expected: ").append(expected.toString()).append('\n');
 		b.append(" Actual: ").append(actual.toString());
 		System.out.println(b.toString());
+		if (expected.equals(actual))
+			return 0;
+		return 1;
 	}
 		
 
 	public static void main(String[] args) {
 		MyLinkedList<String> list = new MyLinkedList<String>();
 		
-		testReturn("size() with an empty list", 0, list.size());
-		testReturn("add()", true, list.add("Hallo"));
-		testReturn("size() after add()", 1, list.size());
-		testReturn("get(0)", "Hallo", list.get(0));
-		testReturn("toString()", "[Hallo]", list.toString());
-		testReturn("add()", true, list.add("Welt"));
-		testReturn("toString()", "[Hallo,Welt]", list.toString());
-		testReturn("get(1)", "Welt", list.get(0));
+		int errors = 0;
+		
+		errors += testReturn("size() with an empty list", 0, list.size());
+		errors += testReturn("add()", true, list.add("Hallo"));
+		errors += testReturn("size() after add()", 1, list.size());
+		errors += testReturn("get(0)", "Hallo", list.get(0));
+		errors += testReturn("toString()", "[Hallo]", list.toString());
+		errors += testReturn("add()", true, list.add("Welt"));
+		errors += testReturn("toString()", "[Hallo,Welt]", list.toString());
+		errors += testReturn("get(1)", "Welt", list.get(1));
 		list.add(0, "Achtung");
-		testReturn("toString()", "[Achtung,Hallo,Welt]", list.toString());
-		testReturn("set()", "Hallo", list.set(1, "Hello"));
-		testReturn("toString()", "[Achtung,Hello,Welt]", list.toString());
-		testReturn("remove()", "Hello", list.remove(1));
-		testReturn("toString()", "[Achtung,Welt]", list.toString());
-		testReturn("addAll()", true, list.addAll(1, Arrays.asList("I", "am", "an", "example")));
-		testReturn("toString()", "[Achtung,I,am,an,example,Welt]", list.toString());
+		errors += testReturn("toString()", "[Achtung,Hallo,Welt]", list.toString());
+		errors += testReturn("set()", "Hallo", list.set(1, "Hello"));
+		errors += testReturn("toString()", "[Achtung,Hello,Welt]", list.toString());
+		errors += testReturn("remove()", "Hello", list.remove(1));
+		errors += testReturn("toString()", "[Achtung,Welt]", list.toString());
+		errors += testReturn("addAll()", true, list.addAll(1, Arrays.asList("I", "am", "an", "example")));
+		errors += testReturn("toString()", "[Achtung,I,am,an,example,Welt]", list.toString());
 		
 		list.clear();
-		testReturn("size() after clear()", 0, list.size());
+		errors += testReturn("size() after clear()", 0, list.size());
+		
+		System.out.println();
+		System.out.println("========================");
+		System.out.println("Summary: " + String.valueOf(errors) +" errors.");
+		
 
 	}
 }
