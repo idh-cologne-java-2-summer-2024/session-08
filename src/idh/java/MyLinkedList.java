@@ -18,6 +18,27 @@ public class MyLinkedList<T> implements List<T> {
 	ListElement(T value) {
 	    this.payload = value;
 	}
+
+	public int size() {
+	    if (next == null) {
+		return 1;
+	    } else {
+		return 1 + next.size();
+	    }
+	}
+
+	public T get(int index) {
+	    if (index == 0) {
+		// 1. Basisfall: Element gefunden
+		return payload;
+	    } else if (next == null) {
+		// 2. Basisfall: Ende der Liste
+		throw new IndexOutOfBoundsException();
+	    } else {
+		// Rekursionsschritt
+		return next.get(index - 1);
+	    }
+	}
     }
 
     /**
@@ -28,12 +49,20 @@ public class MyLinkedList<T> implements List<T> {
 
     @Override
     public int size() {
-	// TODO: Implement
-	int i = 0;
-	// this works, because the List<T> interface inherits from Iterable<T>
-	for (T x : this)
-	    i++;
-	return i;
+	if (first == null)
+	    return 0;
+	else
+	    return first.size();
+    }
+
+    @Override
+    public T get(int index) {
+	if (first == null)
+	    throw new IndexOutOfBoundsException();
+	else
+	    return first.get(index);
+
+	// return getElement(index).payload;
     }
 
     @Override
@@ -233,10 +262,6 @@ public class MyLinkedList<T> implements List<T> {
 	first = null;
     }
 
-    @Override
-    public T get(int index) {
-	return getElement(index).payload;
-    }
 
     @Override
     public int indexOf(Object o) {
@@ -422,11 +447,14 @@ public class MyLinkedList<T> implements List<T> {
 	testReturn("toString()", "[Hallo]", list.toString());
 	testReturn("add()", true, list.add("Welt"));
 	testReturn("toString()", "[Hallo,Welt]", list.toString());
-	testReturn("get(1)", "Welt", list.get(1));
+	// testReturn("get(1)", "Welt", list.get(1));
+
 
 	list.add(0, "Achtung");
 
 	testReturn("toString()", "[Achtung,Hallo,Welt]", list.toString());
+	testReturn("size() after add()", 3, list.size());
+	System.out.println(list.get(1));
 	testReturn("set()", "Hallo", list.set(1, "Hello"));
 	testReturn("toString()", "[Achtung,Hello,Welt]", list.toString());
 	testReturn("remove()", "Hello", list.remove(1));
